@@ -188,7 +188,8 @@ public class AzureCognitiveSearchMemoryStore : IMemoryStore
 
         SearchOptions options = new()
         {
-            VectorQueries = { vectorQuery }
+            VectorQueries = { vectorQuery },
+            
         };
 
         Response<SearchResults<AzureCognitiveSearchMemoryRecord>>? searchResult = null;
