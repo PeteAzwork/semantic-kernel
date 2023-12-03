@@ -17,11 +17,11 @@ public class AzureCognitiveSearchMemoryRecord
     /// <summary>
     /// ID field name.
     /// </summary>
-    public const string IdField = "sourcepage";
+    public const string IdField = "id";
     /// <summary>
     /// Text field name.
     /// </summary>
-    public const string TextField = "Text";
+    public const string TextField = "text";
     /// <summary>
     /// Embedding field name.
     /// </summary>
@@ -29,7 +29,7 @@ public class AzureCognitiveSearchMemoryRecord
     /// <summary>
     /// External source name field name.
     /// </summary>
-    public const string ExternalSourceNameField = "ExternalSourceName";
+    public const string ExternalSourceNameField = "sourcepage";
     /// <summary>
     /// Description field name.
     /// </summary>
@@ -190,7 +190,7 @@ public class AzureCognitiveSearchMemoryRecord
     /// <returns>The encoded ID.</returns>
     protected internal static string EncodeId(string realId)
     {
-return realId;
+        return realId;
     }
 
     /// <summary>
@@ -200,6 +200,6 @@ return realId;
     /// <returns>The decoded ID.</returns>
     private protected static string DecodeId(string encodedId)
     {
-return encodedId;
+        return encodedId;
     }
 }
