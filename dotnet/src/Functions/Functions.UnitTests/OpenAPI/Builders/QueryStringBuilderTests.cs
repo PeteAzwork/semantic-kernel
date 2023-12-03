@@ -3,12 +3,13 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using Microsoft.SemanticKernel.Diagnostics;
-using Microsoft.SemanticKernel.Functions.OpenAPI.Builders;
-using Microsoft.SemanticKernel.Functions.OpenAPI.Model;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.Plugins.OpenAPI.Builders;
+using Microsoft.SemanticKernel.Plugins.OpenAPI.Model;
 using Xunit;
 
 namespace SemanticKernel.Functions.UnitTests.OpenAPI.Builders;
+
 public class QueryStringBuilderTests
 {
     [Fact]
@@ -38,9 +39,9 @@ public class QueryStringBuilderTests
             HttpMethod.Get,
             "fake_description",
             new List<RestApiOperationParameter> { firstParameterMetadata, secondParameterMetadata },
-            new Dictionary<string, string>());
+            new Dictionary<string, string?>());
 
-        var arguments = new Dictionary<string, string>
+        var arguments = new Dictionary<string, string?>
         {
             { "p1", "v1" },
             { "p2", "v2" }
@@ -80,9 +81,9 @@ public class QueryStringBuilderTests
             HttpMethod.Get,
             "fake_description",
             new List<RestApiOperationParameter> { firstParameterMetadata, secondParameterMetadata },
-            new Dictionary<string, string>());
+            new Dictionary<string, string?>());
 
-        var arguments = new Dictionary<string, string>
+        var arguments = new Dictionary<string, string?>
         {
             { "p2", "v2" }
         };
@@ -121,15 +122,15 @@ public class QueryStringBuilderTests
             HttpMethod.Get,
             "fake_description",
             new List<RestApiOperationParameter> { firstParameterMetadata, secondParameterMetadata },
-            new Dictionary<string, string>());
+            new Dictionary<string, string?>());
 
-        var arguments = new Dictionary<string, string>
+        var arguments = new Dictionary<string, string?>
         {
             { "p2", "v2" }
         };
 
         //Act and assert
-        Assert.Throws<SKException>(() => operation.BuildQueryString(arguments));
+        Assert.Throws<KernelException>(() => operation.BuildQueryString(arguments));
     }
 
     [Theory]
@@ -142,7 +143,7 @@ public class QueryStringBuilderTests
         // Arrange
         var metadata = new List<RestApiOperationParameter>
         {
-            new RestApiOperationParameter(
+            new(
                 name: "p1",
                 type: "string",
                 isRequired: false,
@@ -151,12 +152,12 @@ public class QueryStringBuilderTests
                 style: RestApiOperationParameterStyle.Form)
         };
 
-        var arguments = new Dictionary<string, string>
+        var arguments = new Dictionary<string, string?>
         {
             { "p1", $"p1_value{specialSymbol}" }
         };
 
-        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string>());
+        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string?>());
 
         // Act
         var queryString = operation.BuildQueryString(arguments);
@@ -173,7 +174,7 @@ public class QueryStringBuilderTests
         // Arrange
         var metadata = new List<RestApiOperationParameter>
         {
-            new RestApiOperationParameter(
+            new(
                 name: "p1",
                 type: "array",
                 isRequired: false,
@@ -181,7 +182,7 @@ public class QueryStringBuilderTests
                 location: RestApiOperationParameterLocation.Query,
                 style: RestApiOperationParameterStyle.Form,
                 arrayItemType: "string"),
-            new RestApiOperationParameter(
+            new(
                 name: "p2",
                 type: "array",
                 isRequired: false,
@@ -191,13 +192,13 @@ public class QueryStringBuilderTests
                 arrayItemType: "integer")
         };
 
-        var arguments = new Dictionary<string, string>
+        var arguments = new Dictionary<string, string?>
         {
             { "p1", "[\"a\",\"b\",\"c\"]" },
             { "p2", "[1,2,3]" }
         };
 
-        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string>());
+        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string?>());
 
         // Act
         var result = operation.BuildQueryString(arguments);
@@ -214,7 +215,7 @@ public class QueryStringBuilderTests
         // Arrange
         var metadata = new List<RestApiOperationParameter>
         {
-            new RestApiOperationParameter(
+            new(
                 name: "p1",
                 type: "array",
                 isRequired: false,
@@ -222,7 +223,7 @@ public class QueryStringBuilderTests
                 location: RestApiOperationParameterLocation.Query,
                 style: RestApiOperationParameterStyle.Form,
                 arrayItemType: "string"),
-            new RestApiOperationParameter(
+            new(
                 name: "p2",
                 type: "array",
                 isRequired: false,
@@ -232,13 +233,13 @@ public class QueryStringBuilderTests
                 arrayItemType: "integer")
         };
 
-        var arguments = new Dictionary<string, string>
+        var arguments = new Dictionary<string, string?>
         {
             { "p1", "[\"a\",\"b\",\"c\"]" },
             { "p2", "[1,2,3]" }
         };
 
-        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string>());
+        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string?>());
 
         // Act
         var result = operation.BuildQueryString(arguments);
@@ -255,7 +256,7 @@ public class QueryStringBuilderTests
         // Arrange
         var metadata = new List<RestApiOperationParameter>
         {
-            new RestApiOperationParameter(
+            new(
                 name: "p1",
                 type: "string",
                 isRequired: false,
@@ -263,7 +264,7 @@ public class QueryStringBuilderTests
                 location: RestApiOperationParameterLocation.Query,
                 style: RestApiOperationParameterStyle.Form,
                 arrayItemType: "string"),
-            new RestApiOperationParameter(
+            new(
                 name: "p2",
                 type: "boolean",
                 isRequired: false,
@@ -272,13 +273,13 @@ public class QueryStringBuilderTests
                 style: RestApiOperationParameterStyle.Form)
         };
 
-        var arguments = new Dictionary<string, string>
+        var arguments = new Dictionary<string, string?>
         {
             { "p1", "v1" },
             { "p2", "true" }
         };
 
-        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string>());
+        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string?>());
 
         // Act
         var result = operation.BuildQueryString(arguments);
@@ -295,7 +296,7 @@ public class QueryStringBuilderTests
         // Arrange
         var metadata = new List<RestApiOperationParameter>
         {
-            new RestApiOperationParameter(
+            new(
                 name: "p1",
                 type: "array",
                 isRequired: false,
@@ -303,7 +304,7 @@ public class QueryStringBuilderTests
                 location: RestApiOperationParameterLocation.Query,
                 style: RestApiOperationParameterStyle.SpaceDelimited,
                 arrayItemType: "string"),
-            new RestApiOperationParameter(
+            new(
                 name: "p2",
                 type: "array",
                 isRequired: false,
@@ -313,13 +314,13 @@ public class QueryStringBuilderTests
                 arrayItemType: "integer")
         };
 
-        var arguments = new Dictionary<string, string>
+        var arguments = new Dictionary<string, string?>
         {
             { "p1", "[\"a\",\"b\",\"c\"]" },
             { "p2", "[1,2,3]" }
         };
 
-        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string>());
+        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string?>());
 
         // Act
         var result = operation.BuildQueryString(arguments);
@@ -336,7 +337,7 @@ public class QueryStringBuilderTests
         // Arrange
         var metadata = new List<RestApiOperationParameter>
         {
-            new RestApiOperationParameter(
+            new(
                 name: "p1",
                 type: "array",
                 isRequired: false,
@@ -344,7 +345,7 @@ public class QueryStringBuilderTests
                 location: RestApiOperationParameterLocation.Query,
                 style: RestApiOperationParameterStyle.SpaceDelimited,
                 arrayItemType: "string"),
-            new RestApiOperationParameter(
+            new(
                 name: "p2",
                 type: "array",
                 isRequired: false,
@@ -354,13 +355,13 @@ public class QueryStringBuilderTests
                 arrayItemType: "integer")
         };
 
-        var arguments = new Dictionary<string, string>
+        var arguments = new Dictionary<string, string?>
         {
             { "p1", "[\"a\",\"b\",\"c\"]" },
             { "p2", "[1,2,3]" }
         };
 
-        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string>());
+        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string?>());
 
         // Act
         var result = operation.BuildQueryString(arguments);
@@ -377,7 +378,7 @@ public class QueryStringBuilderTests
         // Arrange
         var metadata = new List<RestApiOperationParameter>
         {
-            new RestApiOperationParameter(
+            new(
                 name: "p1",
                 type: "array",
                 isRequired: false,
@@ -385,7 +386,7 @@ public class QueryStringBuilderTests
                 location: RestApiOperationParameterLocation.Query,
                 style: RestApiOperationParameterStyle.PipeDelimited,
                 arrayItemType: "string"),
-            new RestApiOperationParameter(
+            new(
                 name: "p2",
                 type: "array",
                 isRequired: false,
@@ -395,13 +396,13 @@ public class QueryStringBuilderTests
                 arrayItemType: "integer")
         };
 
-        var arguments = new Dictionary<string, string>
+        var arguments = new Dictionary<string, string?>
         {
             { "p1", "[\"a\",\"b\",\"c\"]" },
             { "p2", "[1,2,3]" }
         };
 
-        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string>());
+        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string?>());
 
         // Act
         var result = operation.BuildQueryString(arguments);
@@ -418,7 +419,7 @@ public class QueryStringBuilderTests
         // Arrange
         var metadata = new List<RestApiOperationParameter>
         {
-            new RestApiOperationParameter(
+            new(
                 name: "p1",
                 type: "array",
                 isRequired: false,
@@ -426,7 +427,7 @@ public class QueryStringBuilderTests
                 location: RestApiOperationParameterLocation.Query,
                 style: RestApiOperationParameterStyle.PipeDelimited,
                 arrayItemType: "string"),
-            new RestApiOperationParameter(
+            new(
                 name: "p2",
                 type: "array",
                 isRequired: false,
@@ -436,13 +437,13 @@ public class QueryStringBuilderTests
                 arrayItemType: "integer")
         };
 
-        var arguments = new Dictionary<string, string>
+        var arguments = new Dictionary<string, string?>
         {
             { "p1", "[\"a\",\"b\",\"c\"]" },
             { "p2", "[1,2,3]" }
         };
 
-        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string>());
+        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string?>());
 
         // Act
         var result = operation.BuildQueryString(arguments);
@@ -460,28 +461,28 @@ public class QueryStringBuilderTests
         var metadata = new List<RestApiOperationParameter>
         {
             //'Form' style array parameter with comma separated values
-            new RestApiOperationParameter(name: "p1", type: "array", isRequired: true, expand: false, location: RestApiOperationParameterLocation.Query, style: RestApiOperationParameterStyle.Form, arrayItemType: "string"),
+            new(name: "p1", type: "array", isRequired: true, expand: false, location: RestApiOperationParameterLocation.Query, style: RestApiOperationParameterStyle.Form, arrayItemType: "string"),
 
             //'Form' style primitive boolean parameter
-            new RestApiOperationParameter(name: "p2", type: "boolean", isRequired: true, expand: false, location: RestApiOperationParameterLocation.Query, style: RestApiOperationParameterStyle.Form),
+            new(name: "p2", type: "boolean", isRequired: true, expand: false, location: RestApiOperationParameterLocation.Query, style: RestApiOperationParameterStyle.Form),
 
             //'Form' style array parameter with parameter per array item
-            new RestApiOperationParameter(name : "p3", type : "array", isRequired : true, expand : true, location : RestApiOperationParameterLocation.Query, style : RestApiOperationParameterStyle.Form),
+            new(name : "p3", type : "array", isRequired : true, expand : true, location : RestApiOperationParameterLocation.Query, style : RestApiOperationParameterStyle.Form),
 
             //'SpaceDelimited' style array parameter with space separated values
-            new RestApiOperationParameter(name : "p4", type : "array", isRequired : true, expand : false, location : RestApiOperationParameterLocation.Query, style : RestApiOperationParameterStyle.SpaceDelimited),
+            new(name : "p4", type : "array", isRequired : true, expand : false, location : RestApiOperationParameterLocation.Query, style : RestApiOperationParameterStyle.SpaceDelimited),
 
             //'SpaceDelimited' style array parameter with parameter per array item
-            new RestApiOperationParameter(name : "p5", type : "array", isRequired : true, expand : true, location : RestApiOperationParameterLocation.Query, style : RestApiOperationParameterStyle.SpaceDelimited),
+            new(name : "p5", type : "array", isRequired : true, expand : true, location : RestApiOperationParameterLocation.Query, style : RestApiOperationParameterStyle.SpaceDelimited),
 
             //'PipeDelimited' style array parameter with pipe separated values
-            new RestApiOperationParameter(name : "p6", type : "array", isRequired : true, expand : false, location : RestApiOperationParameterLocation.Query, style : RestApiOperationParameterStyle.PipeDelimited),
+            new(name : "p6", type : "array", isRequired : true, expand : false, location : RestApiOperationParameterLocation.Query, style : RestApiOperationParameterStyle.PipeDelimited),
 
             //'PipeDelimited' style array parameter with parameter per array item
-            new RestApiOperationParameter(name : "p7", type : "array", isRequired : true, expand : true, location : RestApiOperationParameterLocation.Query, style : RestApiOperationParameterStyle.PipeDelimited),
+            new(name : "p7", type : "array", isRequired : true, expand : true, location : RestApiOperationParameterLocation.Query, style : RestApiOperationParameterStyle.PipeDelimited),
         };
 
-        var arguments = new Dictionary<string, string>
+        var arguments = new Dictionary<string, string?>
         {
             { "p1", "[\"a\",\"b\"]" },
             { "p2", "false" },
@@ -492,7 +493,7 @@ public class QueryStringBuilderTests
             { "p7", "[\"e\",\"f\"]" }
         };
 
-        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string>());
+        var operation = new RestApiOperation("fake_id", new Uri("https://fake-random-test-host"), "fake_path", HttpMethod.Get, "fake_description", metadata, new Dictionary<string, string?>());
 
         // Act
         var result = operation.BuildQueryString(arguments);
