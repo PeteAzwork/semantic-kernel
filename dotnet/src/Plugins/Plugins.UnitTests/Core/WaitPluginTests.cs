@@ -23,11 +23,8 @@ public class WaitPluginTests
     [Fact]
     public void ItCanBeImported()
     {
-        // Arrange
-        var kernel = Kernel.Builder.Build();
-
         // Act - Assert no exception occurs e.g. due to reflection
-        kernel.ImportFunctions(new WaitPlugin(), "wait");
+        Assert.NotNull(KernelPluginFactory.CreateFromObject<WaitPlugin>("wait"));
     }
 
     [Theory]

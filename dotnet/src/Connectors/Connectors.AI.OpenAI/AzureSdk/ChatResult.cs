@@ -3,12 +3,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Azure.AI.OpenAI;
+using Microsoft.SemanticKernel.AI;
 using Microsoft.SemanticKernel.AI.ChatCompletion;
 using Microsoft.SemanticKernel.AI.TextCompletion;
-using Microsoft.SemanticKernel.Diagnostics;
-using Microsoft.SemanticKernel.Orchestration;
 
-namespace Microsoft.SemanticKernel.Connectors.AI.OpenAI.AzureSdk;
+namespace Microsoft.SemanticKernel.Connectors.AI.OpenAI;
 
 internal sealed class ChatResult : IChatResult, ITextResult
 {
@@ -23,8 +22,8 @@ internal sealed class ChatResult : IChatResult, ITextResult
 
     public ModelResult ModelResult { get; }
 
-    public Task<ChatMessageBase> GetChatMessageAsync(CancellationToken cancellationToken = default)
-        => Task.FromResult<ChatMessageBase>(new SKChatMessage(this._choice.Message));
+    public Task<SemanticKernel.AI.ChatCompletion.ChatMessage> GetChatMessageAsync(CancellationToken cancellationToken = default)
+        => Task.FromResult<SemanticKernel.AI.ChatCompletion.ChatMessage>(new AzureOpenAIChatMessage(this._choice.Message));
 
     public Task<string> GetCompletionAsync(CancellationToken cancellationToken = default)
     {

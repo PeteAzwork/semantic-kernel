@@ -12,7 +12,7 @@ namespace Microsoft.SemanticKernel.Connectors.Memory.AzureCognitiveSearch;
 /// Azure Cognitive Search record and index definition.
 /// Note: once defined, index cannot be modified.
 /// </summary>
-public class AzureCognitiveSearchMemoryRecord
+internal sealed class AzureCognitiveSearchMemoryRecord
 {
     /// <summary>
     /// ID field name.
@@ -188,7 +188,7 @@ public class AzureCognitiveSearchMemoryRecord
     /// </summary>
     /// <param name="realId">The original ID.</param>
     /// <returns>The encoded ID.</returns>
-    protected internal static string EncodeId(string realId)
+    internal static string EncodeId(string realId)
     {
         return realId;
     }
@@ -198,7 +198,7 @@ public class AzureCognitiveSearchMemoryRecord
     /// </summary>
     /// <param name="encodedId">The encoded ID.</param>
     /// <returns>The decoded ID.</returns>
-    private protected static string DecodeId(string encodedId)
+    private static string DecodeId(string encodedId)
     {
         return encodedId;
     }
